@@ -1,5 +1,6 @@
 package com.sksamuel.elastic4s.http
 
+import com.sksamuel.elastic4s.FieldsMapper
 import com.sksamuel.elastic4s.script.ScriptDefinition
 import org.elasticsearch.common.xcontent.{XContentBuilder, XContentFactory}
 import org.elasticsearch.script.ScriptType
@@ -21,7 +22,7 @@ object ScriptBuilderFn {
     if (script.params.nonEmpty) {
       builder.startObject("params")
       script.params.foreach { case (key, value) =>
-        builder.field(key, value)
+        builder.field(key, FieldsMapper.mapper_for_numbers(value))
       }
       builder.endObject()
     }

@@ -6,10 +6,11 @@ import sbt.Keys._
 object Build extends AutoPlugin {
 
   override def trigger = AllRequirements
+
   override def requires = JvmPlugin
 
   object autoImport {
-    val org = "com.sksamuel.elastic4s"
+    val org = "us.pinguo.bigdata.elastic4s"
     val AkkaVersion = "2.4.17"
     val CatsVersion = "0.9.0"
     val CirceVersion = "0.7.1"
@@ -24,7 +25,7 @@ object Build extends AutoPlugin {
     val MockitoVersion = "1.9.5"
     val PlayJsonVersion = "2.6.0-M6"
     val ReactiveStreamsVersion = "1.0.0"
-    val ScalaVersion = "2.12.2"
+    val ScalaVersion = "2.11.8"
     val ScalatestVersion = "3.0.1"
     val Slf4jVersion = "1.7.12"
   }
@@ -51,20 +52,15 @@ object Build extends AutoPlugin {
     scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8"),
     javacOptions := Seq("-source", "1.7", "-target", "1.7"),
     libraryDependencies ++= Seq(
-      "com.sksamuel.exts"                     %% "exts"                     % ExtsVersion,
-      "org.typelevel"                         %% "cats"                     % CatsVersion,
-      "org.slf4j"                             % "slf4j-api"                 % Slf4jVersion,
-      "org.elasticsearch"                     % "elasticsearch"             % ElasticsearchVersion,
-      "org.mockito"                           % "mockito-all"               % MockitoVersion        % "test",
-      "org.scalatest"                         %% "scalatest"                % ScalatestVersion      % "test"
+      "com.sksamuel.exts" %% "exts" % ExtsVersion,
+      "org.typelevel" %% "cats" % CatsVersion,
+      "org.slf4j" % "slf4j-api" % Slf4jVersion,
+      "org.elasticsearch" % "elasticsearch" % ElasticsearchVersion,
+      "org.mockito" % "mockito-all" % MockitoVersion % "test",
+      "org.scalatest" %% "scalatest" % ScalatestVersion % "test"
     ),
-    publishTo := {
-      val nexus = "https://oss.sonatype.org/"
-      if (version.value.trim.endsWith("SNAPSHOT"))
-        Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
+    publishTo := Some("Artifactory Realm" at "http://54.222.244.187:8081/artifactory/bigdata;build.timestamp=" + new java.util.Date().getTime),
+    credentials += Credentials(Path.userHome / ".sbt" / "credentials"),
     pomExtra := {
       <url>https://github.com/sksamuel/elastic4s</url>
         <licenses>

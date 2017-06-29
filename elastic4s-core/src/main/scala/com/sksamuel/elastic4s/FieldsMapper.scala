@@ -1,8 +1,8 @@
 package com.sksamuel.elastic4s
 
 /**
- * Converts between scala types and types that Elasticsearch understands.
- */
+  * Converts between scala types and types that Elasticsearch understands.
+  */
 object FieldsMapper {
 
   import scala.collection.JavaConverters._
@@ -23,6 +23,15 @@ object FieldsMapper {
       case iter: Iterable[_] => iter.map(mapper).toArray
       case a: AnyRef => a
       case a: Any => a.toString
+      case null => null
+    }
+  }
+
+  def mapper_for_numbers(a: Any): Any = {
+    a match {
+      case map: Map[_, _] => map.map { case (key, value) => key -> mapper(value) }.asJava
+      case iter: Iterable[_] => iter.map(mapper).toArray
+      case a: Any => a
       case null => null
     }
   }
