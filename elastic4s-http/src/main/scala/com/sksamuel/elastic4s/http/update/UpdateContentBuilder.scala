@@ -5,8 +5,12 @@ import com.sksamuel.elastic4s.http.ScriptBuilderFn
 import com.sksamuel.elastic4s.update.UpdateDefinition
 import org.elasticsearch.common.bytes.BytesArray
 import org.elasticsearch.common.xcontent.{XContentBuilder, XContentFactory, XContentType}
+import org.json4s.DefaultFormats
+import org.json4s.jackson.Serialization
 
 object UpdateContentBuilder {
+  private implicit val format = DefaultFormats
+
   def apply(request: UpdateDefinition): XContentBuilder = {
 
     val builder = XContentFactory.jsonBuilder()
@@ -35,7 +39,8 @@ object UpdateContentBuilder {
     if (request.upsertFields.nonEmpty) {
       builder.startObject("upsert")
       request.upsertFields.foreach { case (name, value) =>
-        builder.field(name, FieldsMapper.mapper(value))
+        val json = new BytesArray(Serialization.write(value.asInstanceOf[AnyRef]))
+        builder.rawField(name, json, XContentType.JSON)
       }
       builder.endObject()
     }

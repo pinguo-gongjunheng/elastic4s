@@ -2,10 +2,15 @@ package com.sksamuel.elastic4s.http
 
 import com.sksamuel.elastic4s.FieldsMapper
 import com.sksamuel.elastic4s.script.ScriptDefinition
-import org.elasticsearch.common.xcontent.{XContentBuilder, XContentFactory}
+import org.elasticsearch.common.bytes.{BytesArray, BytesReference}
+import org.elasticsearch.common.xcontent.{XContentBuilder, XContentFactory, XContentType}
 import org.elasticsearch.script.ScriptType
+import org.json4s.DefaultFormats
+import org.json4s.jackson.Serialization
 
 object ScriptBuilderFn {
+  implicit val format = DefaultFormats
+
   def apply(script: ScriptDefinition): XContentBuilder = {
 
     val builder = XContentFactory.jsonBuilder()
@@ -22,7 +27,8 @@ object ScriptBuilderFn {
     if (script.params.nonEmpty) {
       builder.startObject("params")
       script.params.foreach { case (key, value) =>
-        builder.field(key, FieldsMapper.mapper_for_numbers(value))
+        val json = new BytesArray(Serialization.write(value.asInstanceOf[AnyRef]))
+        builder.rawField(key, json, XContentType.JSON)
       }
       builder.endObject()
     }

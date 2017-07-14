@@ -76,6 +76,8 @@ lazy val http = Project("elastic4s-http", file("elastic4s-http"))
       "org.apache.httpcomponents"     % "httpcore-nio"            % "4.4.5",
       "org.apache.httpcomponents"     % "httpcore"                % "4.4.5",
       "org.apache.httpcomponents"     % "httpasyncclient"         % "4.1.2",
+      "org.json4s" %% "json4s-core"    % Json4sVersion,
+      "org.json4s" %% "json4s-jackson" % Json4sVersion,
       "org.apache.logging.log4j"      % "log4j-api"               % Log4jVersion  % "test",
       "com.fasterxml.jackson.core"    % "jackson-core"            % JacksonVersion,
       "com.fasterxml.jackson.core"    % "jackson-databind"        % JacksonVersion,
