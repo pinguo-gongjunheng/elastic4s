@@ -1,8 +1,7 @@
 package com.sksamuel.elastic4s.http
 
-import com.sksamuel.elastic4s.FieldsMapper
 import com.sksamuel.elastic4s.script.ScriptDefinition
-import org.elasticsearch.common.bytes.{BytesArray, BytesReference}
+import org.elasticsearch.common.bytes.BytesArray
 import org.elasticsearch.common.xcontent.{XContentBuilder, XContentFactory, XContentType}
 import org.elasticsearch.script.ScriptType
 import org.json4s.DefaultFormats
